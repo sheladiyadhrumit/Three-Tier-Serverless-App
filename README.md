@@ -1,8 +1,5 @@
 # Three-Tier Serverless Application on AWS
 
-> **Internship Project** | IAM(OPS) India Pvt. Ltd. | ADIT / CVM University  
-> **Student:** Karna Patel | **Enrolment:** 12202040601077 | **Code:** 202000801
-
 [![Deploy](https://github.com/yourusername/your-repo/actions/workflows/deploy.yml/badge.svg)](https://github.com/yourusername/your-repo/actions/workflows/deploy.yml)
 
 ---
@@ -569,4 +566,3 @@ app.use(cors({ origin: 'https://YOUR-CLOUDFRONT-URL.cloudfront.net' }));
 
 ---
 
-*Last updated: 2025 | ADIT / CVM University Internship Project*
