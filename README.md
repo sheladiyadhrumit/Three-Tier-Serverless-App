@@ -1,5 +1,11 @@
 # Three-Tier Serverless Application on AWS
 
+This project implements a Three-Tier Serverless Application using Amazon Web Services (AWS).
+The presentation tier delivers a static frontend, while the application tier runs business logic using serverless functions.
+The data tier securely stores and retrieves application data using managed databases.
+The architecture is highly scalable, cost-efficient, and requires no server management.
+It follows best practices for modern cloud-native application design.
+
 [![Deploy](https://github.com/yourusername/your-repo/actions/workflows/deploy.yml/badge.svg)](https://github.com/yourusername/your-repo/actions/workflows/deploy.yml)
 
 ---
