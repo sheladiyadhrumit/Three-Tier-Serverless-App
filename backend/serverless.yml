@@ -1,0 +1,88 @@
+service: three-tier-serverless-backend
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ap-south-1                  # Mumbai region (closest to Gujarat)
+  stage: ${opt:stage, 'prod'}
+  memorySize: 256                     # MB - increase if getting timeouts
+  timeout: 30                         # seconds - max Lambda timeout is 900s
+
+  # Environment variables - values come from GitHub Secrets via CI/CD
+  environment:
+    DB_HOST: ${env:DB_HOST}
+    DB_USER: ${env:DB_USER}
+    DB_PASS: ${env:DB_PASS}
+    DB_NAME: ${env:DB_NAME}
+    FRONTEND_URL: ${env:FRONTEND_URL, 'https://your-cloudfront-domain.cloudfront.net'}
+    NODE_ENV: production
+
+  # IAM permissions for Lambda
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+          Resource: "arn:aws:logs:*:*:*"
+        # Add more permissions if Lambda needs to access other AWS services
+        # - Effect: Allow
+        #   Action: s3:GetObject
+        #   Resource: "arn:aws:s3:::your-bucket/*"
+
+  # VPC Configuration - REQUIRED to connect Lambda to RDS
+  # Replace with your actual VPC IDs from AWS Console > VPC
+  vpc:
+    securityGroupIds:
+      - ${env:LAMBDA_SECURITY_GROUP, 'sg-xxxxxxxxxxxxxxxxx'}
+    subnetIds:
+      - ${env:PRIVATE_SUBNET_1, 'subnet-xxxxxxxxxxxxxxxxx'}
+      - ${env:PRIVATE_SUBNET_2, 'subnet-yyyyyyyyyyyyyyyyy'}
+
+# Lambda functions
+functions:
+  api:
+    handler: handler.handler
+    description: "Three-tier app API handler"
+    events:
+      - http:
+          path: /health
+          method: get
+          cors: true
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+            allowCredentials: false
+
+# Custom configuration
+custom:
+  # For local development: npx serverless offline
+  serverless-offline:
+    httpPort: 3001
+    host: 0.0.0.0
+
+# Plugins
+plugins:
+  - serverless-offline        # Local development
+
+# Deployment packaging
+package:
+  exclude:
+    - .env
+    - .env.*
+    - '**/*.test.js'
+    - node_modules/.cache/**
+    - README.md
+    - .github/**

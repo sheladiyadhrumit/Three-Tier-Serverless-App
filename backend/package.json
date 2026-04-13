@@ -1,0 +1,28 @@
+{
+  "name": "three-tier-serverless-backend",
+  "version": "1.0.0",
+  "description": "AWS Lambda backend for Three-Tier Serverless Architecture",
+  "main": "handler.js",
+  "scripts": {
+    "start": "npx serverless offline",
+    "deploy": "npx serverless deploy --stage prod",
+    "deploy:staging": "npx serverless deploy --stage staging",
+    "logs": "npx serverless logs -f api --tail",
+    "remove": "npx serverless remove",
+    "test": "echo 'Add tests here with Jest' && exit 0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mysql2": "^3.6.5",
+    "serverless-http": "^3.2.0"
+  },
+  "devDependencies": {
+    "serverless": "^3.38.0",
+    "serverless-offline": "^13.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
